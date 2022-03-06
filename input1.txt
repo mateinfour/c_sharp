@@ -1,0 +1,10 @@
+WP1;möbel;40
+WP2;fussboden;25
+WP3;farbe;15
+WP4;wand 1;50
+WP5;wand 2;30
+WP6;wand 3;70
+WP7;wand 4;25
+WP8;reinigen;30
+WP9;entfernen;10
+
