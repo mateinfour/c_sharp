@@ -1,0 +1,16 @@
+structure:
+
+1. only one main loop which runs as long as any ingredients (from container or tray) are available.
+2. the main loop needs some helper methods:
+  a. a method getItem() returns a new item. it must decide whether to take it from container or tray, 
+    and it must return untereWeckerlhälfte if it is the first item. it must also keep an index for tray 
+    since we must go through tray in order, not randomly. the index is an instance variable so the method and the main loop can access it.  
+3.  a method Remove() removes the item it gets (not by index, direclty use the ingredient). it decides whether to remmove from container or from tray.
+4. a method fits(ingredient, burger) checks whether the ingredient fits on that burger. this can be done in the main loop 
+  but it is more structured to put it into a method.
+5. some snags: the index must be incremented when you return a new item. you get an exception if it grows over the tray boundary, so you ust set it to zero
+  once you find an item that fits (because the next time, you go through tray from the beginning).
+  if you use the FillContainer method that produces 239 items, be careful: then you must not remove the first item the program starts with. it may be better
+  to use FillContainer with all items and simply have getItem check whether it has already returned any items. if not, this is the first time 
+  and it should return the first item of container (which is untereWeckerlhälfte)
+  time: you can simply use a float for seconds and add them up. no need for sleep which only slows down the program (unless you work with parallel threads). 
