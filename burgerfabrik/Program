@@ -1,0 +1,16 @@
+using System;
+using Burgerladen;
+
+namespace BurgerFabrik
+{
+    public class Program
+    {
+        public static void Main()
+        {
+            var burger = new Burger();
+            burger.FillContainer();
+            burger.BuildBurgers();
+            Console.ReadKey();
+        }
+    }
+}
