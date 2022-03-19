@@ -1,0 +1,105 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Diagnostics;
+
+namespace Burgerladen
+{
+    public class Burger3
+    {
+        public Stack<Ingredient> burger = new Stack<Ingredient>();
+        public List<Ingredient> container = new List<Ingredient>();
+        
+        public static Random random = new Random();
+        public Ingredient ingredient = Ingredient.UNTERE_WECKERLHAELFTE;
+        public List<Ingredient> tray = new List<Ingredient>();
+        public int Output = 0;
+        public Stopwatch stopwatch = new Stopwatch();
+        public int trayPos = 0;
+        private double seconds = 0; 
+        // flag indicating whether factory has already started
+        // (if not, first ingredient must be untereWeckerlhälfte)
+        private bool started = false;
+        
+        public enum Ingredient
+        {
+            UNTERE_WECKERLHAELFTE,
+            FLEISCHLABERL,
+            KAESE,
+            SPECK,
+            SALAT,
+            OBERE_WECKERLHAELFTE,
+        }
+         
+        public void FillContainer()
+        {
+            for (int i = 0; i < 40; i++)
+            {
+                for (int j = 0; j < 6; j++)
+                {
+                    container.Add((Ingredient)j);
+                }
+            }
+        }
+       
+        
+
+        public void BuildBurgers()
+        {
+            stopwatch.Start();
+            while (container.Count > 0 || tray.Count > 0)
+
+            {
+                ingredient = getIngredient();
+                if (Fits(ingredient, burger))
+                {
+                    burger.Push(ingredient);
+                    Remove(ingredient);
+                    trayPos = 0;
+                    seconds += 3;
+                }
+                else if (container.Any())
+                {
+                    tray.Add(ingredient);
+                    Remove(ingredient);
+                    seconds += 1;
+                }
+
+                if (burger.Count == 6)
+                {
+                    Output += 1;
+                    var ts = TimeSpan.FromSeconds( seconds );
+                    Console.WriteLine($"output: {Output}, container: {container.Count}, tray: {tray.Count}, time: {ts.Minutes}:{ts.Seconds:00}");
+                    burger.Clear();
+                }
+            }
+            Console.WriteLine($"Finished {Output} Burgers, average time {seconds/Output:F2}s");
+                
+        }
+        
+        private bool Fits(Ingredient item, Stack<Ingredient> b)
+        {
+            var burgerTop = burger.Any()? (int)burger.Peek(): -1;
+            return (int)item == burgerTop + 1;
+        }
+        public Ingredient getIngredient()
+        {
+            var r = container.Any()
+                ? started ? container[random.Next(container.Count)]
+                : container[0]
+                : tray[trayPos++];
+            started = true;
+            
+            if(container.Any()) seconds += started? 1:6;
+            else seconds += 0.25;
+            return r;
+        }
+        private void Remove(Ingredient ingredient)
+        {
+            if (container.Any())
+                container.Remove(ingredient);
+            else
+                tray.Remove(ingredient);
+        }
+    }
+}
